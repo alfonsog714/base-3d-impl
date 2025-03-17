@@ -1,10 +1,21 @@
-CC = gcc
+CC := gcc
+CFLAGS := -Wall -Wextra -std=c99 -g
+LDFLAGS := -lSDL2
+
+SRCS := \
+src/main.c
+
+TARGET := renderer
+
+all: build
 
 build:
-	$(CC) -Wall -std=c99 ./src/*.c -o renderer
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
 
 run:
 	./renderer
 
 clean:
 	rm renderer
+
+.PHONY: all clean run
