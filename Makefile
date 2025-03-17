@@ -9,10 +9,12 @@ TARGET := renderer
 
 all: build
 
-build:
+build: $(TARGET)
+
+$(TARGET):
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
 
-run:
+run: $(TARGET)
 	./renderer
 
 clean:
