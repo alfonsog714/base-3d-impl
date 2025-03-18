@@ -77,8 +77,8 @@ void process_input(void) {
 void update(void) {}
 
 void clear_color_buffer(uint32_t color) {
-  for (int y = 0; y < SCREEN_WIDTH; ++y) {
-    for (int x = 0; x < SCREEN_HEIGHT; ++x) {
+  for (int y = 0; y < SCREEN_HEIGHT; ++y) {
+    for (int x = 0; x < SCREEN_WIDTH; ++x) {
       color_buffer[(SCREEN_WIDTH * y) + x] = color;
     }
   }
