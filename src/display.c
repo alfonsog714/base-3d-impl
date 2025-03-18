@@ -1,5 +1,12 @@
 #include "display.h"
 
+SDL_Window *window = NULL;
+SDL_Renderer *renderer = NULL;
+uint32_t *color_buffer = NULL;
+SDL_Texture *color_buffer_texture = NULL;
+int window_width = 800;
+int window_height = 600;
+
 bool init_window(void) {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
     CHECK_SDL(0);
