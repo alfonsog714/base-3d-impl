@@ -11,13 +11,16 @@ all: build
 
 build: $(TARGET)
 
-$(TARGET):
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
+$(TARGET): display.o
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) display.o $(LDFLAGS)
+
+display.o:
+	$(CC) $(CFLAGS) -c src/display.c
 
 run: $(TARGET)
 	./renderer
 
 clean:
-	rm renderer
+	rm renderer *.o
 
 .PHONY: all clean run
