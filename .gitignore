@@ -1,2 +1,4 @@
 *.o
 renderer
+core
+core.dump
