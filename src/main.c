@@ -29,6 +29,7 @@ bool is_running = false;
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 uint32_t *color_buffer = NULL;
+SDL_Texture *color_buffer_texture = NULL;
 
 /* FUNCTIONS */
 
@@ -52,6 +53,10 @@ void setup(void) {
   color_buffer =
       (uint32_t *)malloc(sizeof(uint32_t) * SCREEN_WIDTH * SCREEN_HEIGHT);
   CHECK(color_buffer, "Color buffer allocation failed.");
+
+  color_buffer_texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ABGR8888,
+                                           SDL_TEXTUREACCESS_STREAMING,
+                                           SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void process_input(void) {
@@ -71,9 +76,27 @@ void process_input(void) {
 
 void update(void) {}
 
+void clear_color_buffer(uint32_t color) {
+  for (int y = 0; y < SCREEN_WIDTH; ++y) {
+    for (int x = 0; x < SCREEN_HEIGHT; ++x) {
+      color_buffer[(SCREEN_WIDTH * y) + x] = color;
+    }
+  }
+}
+
+void render_color_buffer() {
+  SDL_UpdateTexture(color_buffer_texture, NULL, color_buffer,
+                    (int)(SCREEN_WIDTH * sizeof(uint32_t)));
+
+  SDL_RenderCopy(renderer, color_buffer_texture, NULL, NULL);
+}
+
 void render(void) {
-  SDL_SetRenderDrawColor(renderer, 150, 150, 0, 255);
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
   SDL_RenderClear(renderer);
+
+  render_color_buffer();
+  clear_color_buffer(0xFFFFFF00);
 
   SDL_RenderPresent(renderer);
 }
