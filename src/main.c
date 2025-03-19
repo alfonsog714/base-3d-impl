@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "display.h"
+#include "vector.h"
 
 /* GLOBALS */
 bool is_running = false;
@@ -53,6 +54,9 @@ int main(void) {
   is_running = init_window();
 
   setup();
+
+  vec2_t vec2 = {1.0, 2.0};
+  vec3_t vec3 = {1.0, 2.0, 3.0};
 
   while (is_running) {
     process_input();

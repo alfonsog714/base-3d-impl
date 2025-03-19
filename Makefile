@@ -4,7 +4,8 @@ LDFLAGS := -lSDL2
 
 SRCS := \
 src/main.c \
-src/display.c
+src/display.c \
+src/vector.c
 
 TARGET := renderer
 
