@@ -39,7 +39,7 @@ void clear_color_buffer(uint32_t color) {
 }
 
 void draw_pixel(int pos_x, int pos_y, uint32_t color) {
-  if (pos_x < window_width && pos_y < window_height)
+  if (pos_x >= 0 && pos_y >= 0 && pos_x < window_width && pos_y < window_height)
     color_buffer[(window_width * pos_y) + pos_x] = color;
 }
 
@@ -57,7 +57,7 @@ void draw_rect(int pos_x, int pos_y, int w, int h, uint32_t color) {
     for (int x = 0; x < w; ++x) {
       int curr_x = x + pos_x;
       int curr_y = y + pos_y;
-      color_buffer[(window_width * curr_y) + curr_x] = color;
+      draw_pixel(curr_x, curr_y, color);
     }
   }
 }
