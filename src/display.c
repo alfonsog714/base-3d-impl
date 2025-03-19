@@ -38,6 +38,11 @@ void clear_color_buffer(uint32_t color) {
   }
 }
 
+void draw_pixel(int pos_x, int pos_y, uint32_t color) {
+  if (pos_x < window_width && pos_y < window_height)
+    color_buffer[(window_width * pos_y) + pos_x] = color;
+}
+
 void draw_grid(void) {
   for (int y = 0; y < window_height; ++y) {
     for (int x = 0; x < window_width; ++x) {
