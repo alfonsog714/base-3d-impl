@@ -6,13 +6,14 @@
 #include "vector.h"
 
 #define N_POINTS 9 * 9 * 9
-#define FOV_FACTOR 128
+#define FOV_FACTOR 640
 
 /* GLOBALS */
 bool is_running = false;
 
 vec3_t cube_points[N_POINTS];
 vec2_t projected_points[N_POINTS];
+vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
 
 /* FUNCTIONS */
 
@@ -53,8 +54,8 @@ void process_input(void) {
 }
 
 vec2_t project(vec3_t point) {
-  vec2_t projected_point = {.x = (FOV_FACTOR * point.x),
-                            .y = (FOV_FACTOR * point.y)};
+  vec2_t projected_point = {.x = (FOV_FACTOR * point.x) / point.z,
+                            .y = (FOV_FACTOR * point.y) / point.z};
 
   return projected_point;
 }
@@ -62,6 +63,7 @@ vec2_t project(vec3_t point) {
 void update(void) {
   for (int i = 0; i < N_POINTS; i++) {
     vec3_t point = cube_points[i];
+    point.z -= camera_pos.z;
     vec2_t projected_point = project(point);
     projected_points[i] = projected_point;
   }
