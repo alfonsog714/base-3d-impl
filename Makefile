@@ -3,7 +3,8 @@ CFLAGS := -Wall -Wextra -std=c99 -g
 LDFLAGS := -lSDL2
 
 SRCS := \
-src/main.c
+src/main.c \
+src/display.c
 
 TARGET := renderer
 
@@ -11,16 +12,13 @@ all: build
 
 build: $(TARGET)
 
-$(TARGET): display.o
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) display.o $(LDFLAGS)
-
-display.o:
-	$(CC) $(CFLAGS) -c src/display.c
+$(TARGET): 
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
 
 run: $(TARGET)
 	./renderer
 
 clean:
-	rm renderer *.o
+	rm renderer
 
 .PHONY: all clean run
