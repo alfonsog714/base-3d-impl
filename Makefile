@@ -1,6 +1,7 @@
 CC := gcc
 CFLAGS := -Wall -Wextra -std=c99 -g
 LDFLAGS := -lSDL2
+LDFLAGS += -lm
 
 SRCS := \
 src/main.c \
