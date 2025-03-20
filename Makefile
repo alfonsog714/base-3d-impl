@@ -6,7 +6,9 @@ LDFLAGS += -lm
 SRCS := \
 src/main.c \
 src/display.c \
-src/vector.c
+src/vector.c \
+src/mesh.c \
+src/triangle.c
 
 TARGET := renderer
 

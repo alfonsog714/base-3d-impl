@@ -26,18 +26,18 @@
 		}                                                              \
 	} while (0)
 
-#define FPS 30
+#define FPS 60
 #define FRAME_TARGET_TIME (1000 / FPS)
 
 /////////////////////////////////
 // Globals
 /////////////////////////////////
 
-extern int gWindow_width, gWindow_height;
-extern SDL_Window *gWindow;
-extern SDL_Renderer *gRenderer;
-extern uint32_t *gColor_buffer;
-extern SDL_Texture *gColor_buffer_texture;
+extern int window_width, window_height;
+extern SDL_Window *window;
+extern SDL_Renderer *renderer;
+extern uint32_t *color_buffer;
+extern SDL_Texture *color_buffer_texture;
 
 /////////////////////////////////
 // Functions
