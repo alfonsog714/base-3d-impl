@@ -2,11 +2,11 @@
 #define VECTOR_H
 
 typedef struct {
-  float x, y;
+	float x, y;
 } vec2_t;
 
 typedef struct {
-  float x, y, z;
+	float x, y, z;
 } vec3_t;
 
 vec2_t project(int fov, vec3_t point);

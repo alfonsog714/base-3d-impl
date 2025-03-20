@@ -1,0 +1,8 @@
+---
+Checks: >-
+  -*
+  ,google-*
+  ,-google-objc-*
+  ,linuxkernel-*
+  ,misc-definitions-in-headers
+HeaderFilterRegex: ".*"

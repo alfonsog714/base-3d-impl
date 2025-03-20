@@ -10,20 +10,21 @@
 /////////////////////////////////
 
 #define CHECK_SDL(object)                                                      \
-  do {                                                                         \
-    if (!(object)) {                                                           \
-      fprintf(stderr, "SDL Error: %s - %s:%d\n", SDL_GetError(), __FILE__,     \
-              __LINE__);                                                       \
-      return 0;                                                                \
-    }                                                                          \
-  } while (0)
+	do {                                                                   \
+		if (!(object)) {                                               \
+			fprintf(stderr, "SDL Error: %s - %s:%d\n",             \
+				SDL_GetError(), __FILE__, __LINE__);           \
+			return 0;                                              \
+		}                                                              \
+	} while (0)
 
 #define CHECK(object, message)                                                 \
-  do {                                                                         \
-    if (!(object)) {                                                           \
-      fprintf(stderr, "Error: %s - %s:%d\n", (message), __FILE__, __LINE__);   \
-    }                                                                          \
-  } while (0)
+	do {                                                                   \
+		if (!(object)) {                                               \
+			fprintf(stderr, "Error: %s - %s:%d\n", (message),      \
+				__FILE__, __LINE__);                           \
+		}                                                              \
+	} while (0)
 
 #define FPS 30
 #define FRAME_TARGET_TIME (1000 / FPS)
@@ -32,11 +33,11 @@
 // Globals
 /////////////////////////////////
 
-extern int window_width, window_height;
-extern SDL_Window *window;
-extern SDL_Renderer *renderer;
-extern uint32_t *color_buffer;
-extern SDL_Texture *color_buffer_texture;
+extern int gWindow_width, gWindow_height;
+extern SDL_Window *gWindow;
+extern SDL_Renderer *gRenderer;
+extern uint32_t *gColor_buffer;
+extern SDL_Texture *gColor_buffer_texture;
 
 /////////////////////////////////
 // Functions
