@@ -8,6 +8,7 @@
 /////////////////////////////////
 // Macros
 /////////////////////////////////
+
 #define CHECK_SDL(object)                                                      \
   do {                                                                         \
     if (!(object)) {                                                           \
@@ -24,9 +25,13 @@
     }                                                                          \
   } while (0)
 
+#define FPS 30
+#define FRAME_TARGET_TIME (1000 / FPS)
+
 /////////////////////////////////
 // Globals
 /////////////////////////////////
+
 extern int window_width, window_height;
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;

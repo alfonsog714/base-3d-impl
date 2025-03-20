@@ -15,6 +15,7 @@ vec3_t cube_points[N_POINTS];
 vec2_t projected_points[N_POINTS];
 vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
 vec3_t cube_rotation = {.x = 0, .y = 0, .z = 0};
+int previous_frame_time = 0;
 
 /* FUNCTIONS */
 
@@ -55,6 +56,11 @@ void process_input(void) {
 }
 
 void update(void) {
+  while (!SDL_TICKS_PASSED(SDL_GetTicks(),
+                           previous_frame_time + FRAME_TARGET_TIME))
+    ;
+
+  previous_frame_time = SDL_GetTicks();
   cube_rotation.x += 0.005;
   cube_rotation.y += 0.005;
   cube_rotation.z += 0.005;
