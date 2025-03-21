@@ -50,7 +50,7 @@ void draw_pixel(int pos_x, int pos_y, uint32_t color)
 	}
 }
 
-void draw_line(int x0, int y0, int x1, int y1)
+void draw_line(int x0, int y0, int x1, int y1, uint32_t color)
 {
 	int delta_x = x1 - x0;
 	int delta_y = y1 - y0;
@@ -65,7 +65,7 @@ void draw_line(int x0, int y0, int x1, int y1)
 	float current_y = y0;
 
 	for (int i = 0; i <= side_length; i++) {
-		draw_pixel(round(current_x), round(current_y), 0xFFFF0000);
+		draw_pixel(round(current_x), round(current_y), color);
 		current_x += x_inc;
 		current_y += y_inc;
 	}
