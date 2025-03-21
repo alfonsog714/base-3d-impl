@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "array.h"
 #include "display.h"
 #include "mesh.h"
 #include "triangle.h"
@@ -15,7 +16,7 @@ bool is_running = false;
 
 vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
 vec3_t cube_rotation = {.x = 0, .y = 0, .z = 0};
-triangle_t triangles_to_render[N_MESH_FACES];
+triangle_t *triangles_to_render = NULL;
 int previous_frame_time = 0;
 
 /* FUNCTIONS */
@@ -61,6 +62,8 @@ void update(void)
 	cube_rotation.y += 0.005;
 	cube_rotation.z += 0.005;
 
+	triangles_to_render = NULL;
+
 	for (int i = 0; i < N_MESH_FACES; i++) {
 		face_t mesh_face = mesh_faces[i];
 		vec3_t face_vertices[3];
@@ -89,13 +92,14 @@ void update(void)
 			projected_triangle.points[j] = projected_point;
 		}
 
-		triangles_to_render[i] = projected_triangle;
+		array_push(triangles_to_render, projected_triangle);
 	}
 }
 
 void render(void)
 {
-	for (int i = 0; i < N_MESH_FACES; i++) {
+	int tri_count = array_length(triangles_to_render);
+	for (int i = 0; i < tri_count; i++) {
 		triangle_t triangle = triangles_to_render[i];
 		draw_rect(triangle.points[0].x, triangle.points[0].y, 5, 5,
 			  0xFF0000FF);
@@ -106,6 +110,7 @@ void render(void)
 		draw_triangle(&triangle, 0xFFFFFFFF);
 	}
 
+	array_free(triangles_to_render);
 	render_color_buffer();
 	clear_color_buffer(0xFF000000);
 
