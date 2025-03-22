@@ -14,7 +14,6 @@
 bool is_running = false;
 
 vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
-vec3_t cube_rotation = {.x = 0, .y = 0, .z = 0};
 triangle_t *triangles_to_render = NULL;
 int previous_frame_time = 0;
 
@@ -29,6 +28,8 @@ void setup(void)
 	color_buffer_texture = SDL_CreateTexture(
 	    renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
 	    window_width, window_height);
+
+	load_cube_mesh_data();
 }
 
 void process_input(void)
@@ -57,28 +58,28 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	cube_rotation.x += 0.005;
-	cube_rotation.y += 0.005;
-	cube_rotation.z += 0.005;
+	mesh.rotation.x += 0.005;
+	mesh.rotation.y += 0.005;
+	mesh.rotation.z += 0.005;
 
 	triangles_to_render = NULL;
-
-	for (int i = 0; i < N_MESH_FACES; i++) {
-		face_t mesh_face = mesh_faces[i];
+	int num_faces = array_length(mesh.faces);
+	for (int i = 0; i < num_faces; i++) {
+		face_t mesh_face = mesh.faces[i];
 		vec3_t face_vertices[3];
-		face_vertices[0] = mesh_vertices[mesh_face.a - 1];
-		face_vertices[1] = mesh_vertices[mesh_face.b - 1];
-		face_vertices[2] = mesh_vertices[mesh_face.c - 1];
+		face_vertices[0] = mesh.vertices[mesh_face.a - 1];
+		face_vertices[1] = mesh.vertices[mesh_face.b - 1];
+		face_vertices[2] = mesh.vertices[mesh_face.c - 1];
 
 		triangle_t projected_triangle;
 		for (int j = 0; j < 3; j++) {
 			vec3_t transformed_vertex = face_vertices[j];
 			transformed_vertex =
-			    vec3_rotate_x(&transformed_vertex, cube_rotation.x);
+			    vec3_rotate_x(&transformed_vertex, mesh.rotation.x);
 			transformed_vertex =
-			    vec3_rotate_y(&transformed_vertex, cube_rotation.y);
+			    vec3_rotate_y(&transformed_vertex, mesh.rotation.y);
 			transformed_vertex =
-			    vec3_rotate_z(&transformed_vertex, cube_rotation.z);
+			    vec3_rotate_z(&transformed_vertex, mesh.rotation.z);
 
 			transformed_vertex.z -= camera_pos.z;
 
@@ -116,6 +117,13 @@ void render(void)
 	SDL_RenderPresent(renderer);
 }
 
+void free_resources()
+{
+	array_free(mesh.vertices);
+	array_free(mesh.faces);
+	free(color_buffer);
+}
+
 int main(void)
 {
 	is_running = init_window();
@@ -129,5 +137,7 @@ int main(void)
 	};
 
 	destroy();
+	free_resources();
+
 	return 0;
 }
