@@ -59,9 +59,9 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	mesh.rotation.x += 0.005;
-	mesh.rotation.y += 0.005;
-	mesh.rotation.z += 0.005;
+	mesh.rotation.x += 0.01;
+	// mesh.rotation.y += 0.005;
+	// mesh.rotation.z += 0.005;
 
 	triangles_to_render = NULL;
 	int num_faces = array_length(mesh.faces);
@@ -77,10 +77,12 @@ void update(void)
 			vec3_t transformed_vertex = face_vertices[j];
 			transformed_vertex =
 			    vec3_rotate_x(&transformed_vertex, mesh.rotation.x);
-			transformed_vertex =
-			    vec3_rotate_y(&transformed_vertex, mesh.rotation.y);
-			transformed_vertex =
-			    vec3_rotate_z(&transformed_vertex, mesh.rotation.z);
+			// transformed_vertex =
+			//     vec3_rotate_y(&transformed_vertex,
+			//     mesh.rotation.y);
+			// transformed_vertex =
+			//     vec3_rotate_z(&transformed_vertex,
+			//     mesh.rotation.z);
 
 			transformed_vertex.z -= camera_pos.z;
 
