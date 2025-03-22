@@ -104,12 +104,12 @@ void render(void)
 	int tri_count = array_length(triangles_to_render);
 	for (int i = 0; i < tri_count; i++) {
 		triangle_t triangle = triangles_to_render[i];
-		draw_rect(triangle.points[0].x, triangle.points[0].y, 5, 5,
-			  0xFF0000FF);
-		draw_rect(triangle.points[1].x, triangle.points[1].y, 5, 5,
-			  0xFF0000FF);
-		draw_rect(triangle.points[2].x, triangle.points[2].y, 5, 5,
-			  0xFF0000FF);
+		// draw_rect(triangle.points[0].x, triangle.points[0].y, 5, 5,
+		// 	  0xFF0000FF);
+		// draw_rect(triangle.points[1].x, triangle.points[1].y, 5, 5,
+		// 	  0xFF0000FF);
+		// draw_rect(triangle.points[2].x, triangle.points[2].y, 5, 5,
+		// 	  0xFF0000FF);
 		draw_triangle(&triangle, 0xFFFFFFFF);
 	}
 
