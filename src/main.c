@@ -29,7 +29,8 @@ void setup(void)
 	    renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
 	    window_width, window_height);
 
-	load_cube_mesh_data();
+	// load_cube_mesh_data();
+	load_obj_file_data("./assets/f22.obj");
 }
 
 void process_input(void)
