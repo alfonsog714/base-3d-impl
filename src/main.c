@@ -11,11 +11,11 @@
 #define FOV_FACTOR 640
 
 /* GLOBALS */
-bool is_running = false;
+static bool is_running = false;
 
-vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
-triangle_t *triangles_to_render = NULL;
-int previous_frame_time = 0;
+static vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
+static triangle_t *triangles_to_render = NULL;
+static int previous_frame_time = 0;
 
 /* FUNCTIONS */
 
