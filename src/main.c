@@ -60,41 +60,47 @@ void update(void)
 
 	previous_frame_time = SDL_GetTicks();
 	mesh.rotation.x += 0.01;
-	// mesh.rotation.y += 0.005;
-	// mesh.rotation.z += 0.005;
+	mesh.rotation.y += 0.;
+	mesh.rotation.z += 0.;
 
 	triangles_to_render = NULL;
 	int num_faces = array_length(mesh.faces);
+
 	for (int i = 0; i < num_faces; i++) {
 		face_t mesh_face = mesh.faces[i];
 		vec3_t face_vertices[3];
+
 		face_vertices[0] = mesh.vertices[mesh_face.a - 1];
 		face_vertices[1] = mesh.vertices[mesh_face.b - 1];
 		face_vertices[2] = mesh.vertices[mesh_face.c - 1];
 
 		triangle_t projected_triangle;
+		vec3_t transformed_vertices[3];
+
 		for (int j = 0; j < 3; j++) {
 			vec3_t transformed_vertex = face_vertices[j];
+
 			transformed_vertex =
 			    vec3_rotate_x(&transformed_vertex, mesh.rotation.x);
-			// transformed_vertex =
-			//     vec3_rotate_y(&transformed_vertex,
-			//     mesh.rotation.y);
-			// transformed_vertex =
-			//     vec3_rotate_z(&transformed_vertex,
-			//     mesh.rotation.z);
+			transformed_vertex =
+			    vec3_rotate_y(&transformed_vertex, mesh.rotation.y);
+			transformed_vertex =
+			    vec3_rotate_z(&transformed_vertex, mesh.rotation.z);
 
 			transformed_vertex.z -= camera_pos.z;
 
+			transformed_vertices[j] = transformed_vertex;
+		}
+
+		for (int j = 0; j < 3; j++) {
 			vec2_t projected_point =
-			    project(FOV_FACTOR, transformed_vertex);
+			    project(FOV_FACTOR, transformed_vertices[j]);
 
 			projected_point.x += (window_width / 2);
 			projected_point.y += (window_height / 2);
 
 			projected_triangle.points[j] = projected_point;
 		}
-
 		array_push(triangles_to_render, projected_triangle);
 	}
 }
