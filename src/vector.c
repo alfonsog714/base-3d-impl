@@ -109,3 +109,13 @@ vec3_t vec3_cross_product(vec3_t *a, vec3_t *b)
 
 	return ret;
 }
+
+float vec2_dot_product(vec2_t *a, vec2_t *b)
+{
+	return a->x * b->x + a->y * b->y;
+}
+
+float vec3_dot_product(vec3_t *a, vec3_t *b)
+{
+	return a->x * b->x + a->y * b->y + a->z * b->z;
+}

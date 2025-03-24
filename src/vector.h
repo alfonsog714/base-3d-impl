@@ -24,5 +24,7 @@ vec2_t vec2_div(vec2_t *v, float scalar);
 vec3_t vec3_mul(vec3_t *v, float scalar);
 vec3_t vec3_div(vec3_t *v, float scalar);
 vec3_t vec3_cross_product(vec3_t *a, vec3_t *b);
+float vec2_dot_product(vec2_t *a, vec2_t *b);
+float vec3_dot_product(vec3_t *a, vec3_t *b);
 
 #endif // !VECTOR_H
