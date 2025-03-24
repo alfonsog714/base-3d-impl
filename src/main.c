@@ -13,7 +13,7 @@
 /* GLOBALS */
 static bool is_running = false;
 
-static vec3_t camera_pos = {.x = 0, .y = 0, .z = -5};
+static vec3_t camera_pos = {0, 0, 0};
 static triangle_t *triangles_to_render = NULL;
 static int previous_frame_time = 0;
 
@@ -74,9 +74,7 @@ void update(void)
 		face_vertices[1] = mesh.vertices[mesh_face.b - 1];
 		face_vertices[2] = mesh.vertices[mesh_face.c - 1];
 
-		triangle_t projected_triangle;
 		vec3_t transformed_vertices[3];
-
 		for (int j = 0; j < 3; j++) {
 			vec3_t transformed_vertex = face_vertices[j];
 
@@ -87,11 +85,28 @@ void update(void)
 			transformed_vertex =
 			    vec3_rotate_z(&transformed_vertex, mesh.rotation.z);
 
-			transformed_vertex.z -= camera_pos.z;
+			transformed_vertex.z += 5;
 
 			transformed_vertices[j] = transformed_vertex;
 		}
 
+		// Culling algorithm
+		vec3_t vec_a = transformed_vertices[0];
+		vec3_t vec_b = transformed_vertices[1];
+		vec3_t vec_c = transformed_vertices[2];
+
+		vec3_t a = vec3_sub(&vec_b, &vec_a);
+		vec3_t b = vec3_sub(&vec_c, &vec_a);
+
+		vec3_t normal_vector = vec3_cross_product(&a, &b);
+		vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
+
+		float dot = vec3_dot_product(&normal_vector, &camera_ray);
+		if (dot < 0) {
+			continue;
+		}
+
+		triangle_t projected_triangle;
 		for (int j = 0; j < 3; j++) {
 			vec2_t projected_point =
 			    project(FOV_FACTOR, transformed_vertices[j]);
