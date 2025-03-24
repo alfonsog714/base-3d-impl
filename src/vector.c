@@ -73,3 +73,39 @@ vec3_t vec3_sub(vec3_t *a, vec3_t *b)
 	ret.z = a->z - b->z;
 	return ret;
 }
+
+vec2_t vec2_mul(vec2_t *v, float scalar)
+{
+	vec2_t ret = {.x = v->x * scalar, .y = v->y * scalar};
+	return ret;
+}
+
+vec2_t vec2_div(vec2_t *v, float scalar)
+{
+	vec2_t ret = {.x = v->x * 1 / scalar, .y = v->y * 1 / scalar};
+	return ret;
+}
+
+vec3_t vec3_mul(vec3_t *v, float scalar)
+{
+	vec3_t ret = {
+	    .x = v->x * scalar, .y = v->y * scalar, .z = v->z * scalar};
+	return ret;
+}
+
+vec3_t vec3_div(vec3_t *v, float scalar)
+{
+	vec3_t ret = {.x = v->x * 1 / scalar,
+		      .y = v->y * 1 / scalar,
+		      .z = v->z * 1 / scalar};
+	return ret;
+}
+
+vec3_t vec3_cross_product(vec3_t *a, vec3_t *b)
+{
+	vec3_t ret = {.x = a->y * b->z - a->z * b->y,
+		      .y = a->z * b->x - a->x * b->z,
+		      .z = a->x * b->y - a->y * b->x};
+
+	return ret;
+}
