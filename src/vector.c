@@ -119,3 +119,18 @@ float vec3_dot_product(vec3_t *a, vec3_t *b)
 {
 	return a->x * b->x + a->y * b->y + a->z * b->z;
 }
+
+void vec2_normalize(vec2_t *v)
+{
+	float magnitude = vec2_magnitude(v);
+	v->x = v->x * 1 / magnitude;
+	v->y = v->y * 1 / magnitude;
+}
+
+void vec3_normalize(vec3_t *v)
+{
+	float magnitude = vec3_magnitude(v);
+	v->x = v->x * 1 / magnitude;
+	v->y = v->y * 1 / magnitude;
+	v->z = v->z * 1 / magnitude;
+}

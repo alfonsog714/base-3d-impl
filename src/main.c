@@ -96,9 +96,13 @@ void update(void)
 		vec3_t vec_c = transformed_vertices[2];
 
 		vec3_t a = vec3_sub(&vec_b, &vec_a);
+		vec3_normalize(&a);
 		vec3_t b = vec3_sub(&vec_c, &vec_a);
+		vec3_normalize(&b);
 
 		vec3_t normal_vector = vec3_cross_product(&a, &b);
+		vec3_normalize(&normal_vector);
+
 		vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
 
 		float dot = vec3_dot_product(&normal_vector, &camera_ray);
