@@ -6,8 +6,8 @@
 static void int_swap(int *a, int *b);
 static void fill_flat_bottom_triangle(int x0, int y0, int x1, int y1, int x2,
 				      int y2, uint32_t color);
-static void fill_flat_top_triangle(int x1, int y1, int x2, int y2, int mx,
-				   int my);
+static void fill_flat_top_triangle(int x0, int y0, int x1, int y1, int x2,
+				   int y2, uint32_t color);
 
 static void int_swap(int *a, int *b)
 {
@@ -35,9 +35,20 @@ static void fill_flat_bottom_triangle(int x0, int y0, int x1, int y1, int x2,
 	}
 }
 
-static void fill_flat_top_triangle(int x1, int y1, int x2, int y2, int mx,
-				   int my)
+static void fill_flat_top_triangle(int x0, int y0, int x1, int y1, int x2,
+				   int y2, uint32_t color)
 {
+	float inv_slope_1 = (float)(x2 - x0) / (y2 - y0);
+	float inv_slope_2 = (float)(x2 - x1) / (y2 - y1);
+
+	float x_start = x2;
+	float x_end = x2;
+
+	for (int y = y2; y >= y0; y--) {
+		draw_line(x_start, y, x_end, y, color);
+		x_start -= inv_slope_1;
+		x_end -= inv_slope_2;
+	}
 }
 
 void draw_triangle(triangle_t *triangle, uint32_t color)
@@ -74,5 +85,5 @@ void draw_filled_triangle(int x0, int y0, int x1, int y1, int x2, int y2,
 	int m_x = ((float)((x2 - x0) * (y1 - y0)) / (float)(y2 - y0)) + x0;
 
 	fill_flat_bottom_triangle(x0, y0, x1, y1, m_x, m_y, color);
-	// fill_flat_top_triangle(x1, y1, x2, y2, m_x, m_y);
+	fill_flat_top_triangle(x1, y1, m_x, m_y, x2, y2, color);
 }
