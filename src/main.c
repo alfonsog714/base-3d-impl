@@ -1,3 +1,4 @@
+#include <SDL2/SDL_keycode.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -12,6 +13,9 @@
 
 /* GLOBALS */
 static bool is_running = false;
+static bool draw_wire_frame = true;
+static bool draw_filled_triangles = true;
+static bool enable_backface_culling = true;
 
 static vec3_t camera_pos = {0, 0, 0};
 static triangle_t *triangles_to_render = NULL;
@@ -45,6 +49,18 @@ void process_input(void)
 	case SDL_KEYDOWN:
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
 			is_running = false;
+		}
+
+		if (event.key.keysym.sym == SDLK_1) {
+			draw_wire_frame = !draw_wire_frame;
+		}
+
+		if (event.key.keysym.sym == SDLK_2) {
+			draw_filled_triangles = !draw_filled_triangles;
+		}
+
+		if (event.key.keysym.sym == SDLK_c) {
+			enable_backface_culling = !enable_backface_culling;
 		}
 		break;
 	}
@@ -91,23 +107,26 @@ void update(void)
 		}
 
 		// Culling algorithm
-		vec3_t vec_a = transformed_vertices[0];
-		vec3_t vec_b = transformed_vertices[1];
-		vec3_t vec_c = transformed_vertices[2];
+		if (enable_backface_culling) {
+			vec3_t vec_a = transformed_vertices[0];
+			vec3_t vec_b = transformed_vertices[1];
+			vec3_t vec_c = transformed_vertices[2];
 
-		vec3_t a = vec3_sub(&vec_b, &vec_a);
-		vec3_normalize(&a);
-		vec3_t b = vec3_sub(&vec_c, &vec_a);
-		vec3_normalize(&b);
+			vec3_t a = vec3_sub(&vec_b, &vec_a);
+			vec3_normalize(&a);
+			vec3_t b = vec3_sub(&vec_c, &vec_a);
+			vec3_normalize(&b);
 
-		vec3_t normal_vector = vec3_cross_product(&a, &b);
-		vec3_normalize(&normal_vector);
+			vec3_t normal_vector = vec3_cross_product(&a, &b);
+			vec3_normalize(&normal_vector);
 
-		vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
+			vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
 
-		float dot = vec3_dot_product(&normal_vector, &camera_ray);
-		if (dot < 0) {
-			continue;
+			float dot =
+			    vec3_dot_product(&normal_vector, &camera_ray);
+			if (dot < 0) {
+				continue;
+			}
 		}
 
 		triangle_t projected_triangle;
@@ -129,13 +148,17 @@ void render(void)
 	int tri_count = array_length(triangles_to_render);
 	for (int i = 0; i < tri_count; i++) {
 		triangle_t triangle = triangles_to_render[i];
-		// draw_triangle(&triangle, 0xFFFFFFFF);
-		draw_filled_triangle(triangle.points[0].x, triangle.points[0].y,
-				     triangle.points[1].x, triangle.points[1].y,
-				     triangle.points[2].x, triangle.points[2].y,
-				     0xFFFFFFFF);
+		if (draw_filled_triangles) {
+			draw_filled_triangle(
+			    triangle.points[0].x, triangle.points[0].y,
+			    triangle.points[1].x, triangle.points[1].y,
+			    triangle.points[2].x, triangle.points[2].y,
+			    0xFFFFFFFF);
+		}
 
-		draw_triangle(&triangle, 0xFF000000);
+		if (draw_wire_frame) {
+			draw_triangle(&triangle, 0xFF000000);
+		}
 	}
 
 	array_free(triangles_to_render);
