@@ -30,6 +30,19 @@
 #define FRAME_TARGET_TIME (1000 / FPS)
 
 /////////////////////////////////
+// Enums
+/////////////////////////////////
+
+typedef enum { CULL_NONE, CULL_BACKFACE } cull_method_t;
+
+typedef enum {
+	RENDER_WIRE,
+	RENDER_WIRE_VERTEX,
+	RENDER_FILL_TRIANGLE,
+	RENDER_FILL_TRIANGLE_WIRE
+} render_method_t;
+
+/////////////////////////////////
 // Globals
 /////////////////////////////////
 
@@ -38,6 +51,8 @@ extern SDL_Window *window;
 extern SDL_Renderer *renderer;
 extern uint32_t *color_buffer;
 extern SDL_Texture *color_buffer_texture;
+extern render_method_t render_method;
+extern cull_method_t cull_method;
 
 /////////////////////////////////
 // Functions
