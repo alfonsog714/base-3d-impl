@@ -33,8 +33,8 @@ void setup(void)
 	    renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
 	    window_width, window_height);
 
-	// load_cube_mesh_data();
-	load_obj_file_data("./assets/cube.obj");
+	load_cube_mesh_data();
+	// load_obj_file_data("./assets/cube.obj");
 }
 
 void process_input(void)
@@ -136,16 +136,23 @@ void update(void)
 			}
 		}
 
-		triangle_t projected_triangle;
+		vec2_t projected_points[3];
 		for (int j = 0; j < 3; j++) {
-			vec2_t projected_point =
+			projected_points[j] =
 			    project(FOV_FACTOR, transformed_vertices[j]);
 
-			projected_point.x += (window_width / 2);
-			projected_point.y += (window_height / 2);
-
-			projected_triangle.points[j] = projected_point;
+			projected_points[j].x += (window_width / 2);
+			projected_points[j].y += (window_height / 2);
 		}
+
+		triangle_t projected_triangle = {
+		    .points =
+			{
+			    {projected_points[0].x, projected_points[0].y},
+			    {projected_points[1].x, projected_points[1].y},
+			    {projected_points[2].x, projected_points[2].y},
+			},
+		    .color = mesh_face.color};
 		array_push(triangles_to_render, projected_triangle);
 	}
 }
@@ -161,7 +168,7 @@ void render(void)
 			    triangle.points[0].x, triangle.points[0].y,
 			    triangle.points[1].x, triangle.points[1].y,
 			    triangle.points[2].x, triangle.points[2].y,
-			    0xFF808080);
+			    triangle.color);
 		}
 
 		if (render_method == RENDER_FILL_TRIANGLE_WIRE ||
