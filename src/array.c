@@ -1,11 +1,18 @@
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "array.h"
+#include "triangle.h"
 
 #define ARRAY_RAW_DATA(array) ((int *)(array) - 2)
 #define ARRAY_CAPACTIY(array) (ARRAY_RAW_DATA(array)[0])
 #define ARRAY_OCCUPIED(array) (ARRAY_RAW_DATA(array)[1])
+
+static int cmpavgz(const void *a, const void *b)
+{
+	const triangle_t *tri_a = (triangle_t *)a;
+	const triangle_t *tri_b = (triangle_t *)b;
+	return tri_a->depth > tri_b->depth ? 1 : -1;
+}
 
 void *array_hold(void *array, int count, int item_size)
 {
@@ -42,4 +49,10 @@ void array_free(void *array)
 	if (array != NULL) {
 		free(ARRAY_RAW_DATA(array));
 	}
+}
+
+void array_qsort(void *array)
+{
+	int len = array_length(array);
+	qsort(array, len, sizeof(triangle_t), cmpavgz);
 }

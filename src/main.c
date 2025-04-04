@@ -1,4 +1,3 @@
-#include <SDL2/SDL_keycode.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -34,7 +33,7 @@ void setup(void)
 	    window_width, window_height);
 
 	load_cube_mesh_data();
-	// load_obj_file_data("./assets/cube.obj");
+	// load_obj_file_data("./assets/f22.obj");
 }
 
 void process_input(void)
@@ -145,6 +144,11 @@ void update(void)
 			projected_points[j].y += (window_height / 2);
 		}
 
+		float avg_depth =
+		    (transformed_vertices[0].z + transformed_vertices[1].z +
+		     transformed_vertices[2].z) /
+		    3.f;
+
 		triangle_t projected_triangle = {
 		    .points =
 			{
@@ -152,13 +156,18 @@ void update(void)
 			    {projected_points[1].x, projected_points[1].y},
 			    {projected_points[2].x, projected_points[2].y},
 			},
-		    .color = mesh_face.color};
+		    .color = mesh_face.color,
+		    .depth = avg_depth};
 		array_push(triangles_to_render, projected_triangle);
 	}
+
+	array_qsort(triangles_to_render);
 }
 
 void render(void)
 {
+	SDL_RenderClear(renderer);
+	// draw_grid();
 	int tri_count = array_length(triangles_to_render);
 	for (int i = 0; i < tri_count; i++) {
 		triangle_t triangle = triangles_to_render[i];

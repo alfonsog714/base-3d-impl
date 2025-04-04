@@ -12,6 +12,7 @@ typedef struct {
 typedef struct {
 	vec2_t points[3];
 	uint32_t color;
+	float depth;
 } triangle_t;
 
 void draw_triangle(triangle_t *triangle, uint32_t color);
