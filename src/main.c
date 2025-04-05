@@ -4,6 +4,7 @@
 
 #include "array.h"
 #include "display.h"
+#include "matrix.h"
 #include "mesh.h"
 #include "triangle.h"
 #include "vector.h"
@@ -84,6 +85,11 @@ void update(void)
 	mesh.rotation.x += 0.01;
 	mesh.rotation.y += 0.01;
 	mesh.rotation.z += 0.01;
+	mesh.scale.x += 0.002;
+	mesh.scale.y += 0.001;
+
+	mat4_t scale_matrix =
+	    mat4_make_scale(mesh.scale.x, mesh.scale.y, mesh.scale.z);
 
 	triangles_to_render = NULL;
 	int num_faces = array_length(mesh.faces);
@@ -96,16 +102,13 @@ void update(void)
 		face_vertices[1] = mesh.vertices[mesh_face.b - 1];
 		face_vertices[2] = mesh.vertices[mesh_face.c - 1];
 
-		vec3_t transformed_vertices[3];
+		vec4_t transformed_vertices[3];
 		for (int j = 0; j < 3; j++) {
-			vec3_t transformed_vertex = face_vertices[j];
+			vec4_t transformed_vertex =
+			    vec4_from_vec3(&face_vertices[j]);
 
 			transformed_vertex =
-			    vec3_rotate_x(&transformed_vertex, mesh.rotation.x);
-			transformed_vertex =
-			    vec3_rotate_y(&transformed_vertex, mesh.rotation.y);
-			transformed_vertex =
-			    vec3_rotate_z(&transformed_vertex, mesh.rotation.z);
+			    mat4_mul_vec4(&scale_matrix, &transformed_vertex);
 
 			transformed_vertex.z += 5;
 
@@ -114,9 +117,9 @@ void update(void)
 
 		// Culling algorithm
 		if (cull_method == CULL_BACKFACE) {
-			vec3_t vec_a = transformed_vertices[0];
-			vec3_t vec_b = transformed_vertices[1];
-			vec3_t vec_c = transformed_vertices[2];
+			vec3_t vec_a = vec3_from_vec4(&transformed_vertices[0]);
+			vec3_t vec_b = vec3_from_vec4(&transformed_vertices[1]);
+			vec3_t vec_c = vec3_from_vec4(&transformed_vertices[2]);
 
 			vec3_t a = vec3_sub(&vec_b, &vec_a);
 			vec3_normalize(&a);
@@ -138,7 +141,8 @@ void update(void)
 		vec2_t projected_points[3];
 		for (int j = 0; j < 3; j++) {
 			projected_points[j] =
-			    project(FOV_FACTOR, transformed_vertices[j]);
+			    project(FOV_FACTOR,
+				    vec3_from_vec4(&transformed_vertices[j]));
 
 			projected_points[j].x += (window_width / 2);
 			projected_points[j].y += (window_height / 2);
