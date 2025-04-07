@@ -1,5 +1,7 @@
 #include "matrix.h"
+#include "math.h"
 #include "vector.h"
+#include <math.h>
 
 mat4_t mat4_identity(void)
 {
@@ -23,6 +25,42 @@ mat4_t mat4_make_translation(float tx, float ty, float tz)
 	eye.m[0][3] = tx;
 	eye.m[1][3] = ty;
 	eye.m[2][3] = tz;
+	return eye;
+}
+
+mat4_t mat4_make_rotation_x(float angle)
+{
+	mat4_t eye = mat4_identity();
+	float c = cos(angle);
+	float s = sin(angle);
+	eye.m[1][1] = c;
+	eye.m[1][2] = -s;
+	eye.m[2][1] = s;
+	eye.m[2][2] = c;
+	return eye;
+}
+
+mat4_t mat4_make_rotation_y(float angle)
+{
+	mat4_t eye = mat4_identity();
+	float c = cos(angle);
+	float s = sin(angle);
+	eye.m[0][0] = c;
+	eye.m[0][2] = s;
+	eye.m[2][0] = -s;
+	eye.m[2][2] = c;
+	return eye;
+}
+
+mat4_t mat4_make_rotation_z(float angle)
+{
+	mat4_t eye = mat4_identity();
+	float c = cos(angle);
+	float s = sin(angle);
+	eye.m[0][0] = c;
+	eye.m[0][1] = -s;
+	eye.m[1][0] = s;
+	eye.m[1][1] = c;
 	return eye;
 }
 
