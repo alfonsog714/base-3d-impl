@@ -17,6 +17,15 @@ mat4_t mat4_make_scale(float sx, float sy, float sz)
 	return eye;
 }
 
+mat4_t mat4_make_translation(float tx, float ty, float tz)
+{
+	mat4_t eye = mat4_identity();
+	eye.m[0][3] = tx;
+	eye.m[1][3] = ty;
+	eye.m[2][3] = tz;
+	return eye;
+}
+
 vec4_t mat4_mul_vec4(mat4_t *m, vec4_t *v)
 {
 	vec4_t ret;
