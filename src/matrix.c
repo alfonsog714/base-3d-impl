@@ -64,6 +64,20 @@ mat4_t mat4_make_rotation_z(float angle)
 	return eye;
 }
 
+mat4_t mat4_make_perspective(float fov, float aspect, float znear, float zfar)
+{
+	mat4_t eye = {0};
+	float nf = (1 / tan(fov / 2));
+	float z1 = (zfar) / (zfar - znear);
+	float z2 = (-zfar * znear) / (zfar - znear);
+	eye.m[0][0] = (aspect) * (nf);
+	eye.m[1][1] = nf;
+	eye.m[2][2] = z1;
+	eye.m[2][3] = z2;
+	eye.m[3][2] = 1.0;
+	return eye;
+}
+
 vec4_t mat4_mul_vec4(mat4_t *m, vec4_t *v)
 {
 	vec4_t ret;
