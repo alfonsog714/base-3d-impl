@@ -1,5 +1,5 @@
 CC := gcc
-CFLAGS := -Wall -Wextra -std=c99 -g
+CFLAGS := -Wall -Wextra -pedantic -std=gnu11 -g
 LDFLAGS := -lSDL2
 LDFLAGS += -lm
 

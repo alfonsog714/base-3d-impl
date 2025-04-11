@@ -78,6 +78,19 @@ mat4_t mat4_make_perspective(float fov, float aspect, float znear, float zfar)
 	return eye;
 }
 
+vec4_t mat4_mul_vec4_project(mat4_t *m, vec4_t *v)
+{
+	vec4_t ret = mat4_mul_vec4(m, v);
+
+	// This is the perspective divide. We avoid division by zero.
+	if (ret.w != 0) {
+		ret.x /= ret.w;
+		ret.y /= ret.w;
+		ret.z /= ret.w;
+	}
+	return ret;
+}
+
 vec4_t mat4_mul_vec4(mat4_t *m, vec4_t *v)
 {
 	vec4_t ret;

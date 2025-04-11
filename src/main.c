@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -9,14 +10,13 @@
 #include "triangle.h"
 #include "vector.h"
 
-#define FOV_FACTOR 640
-
 /* GLOBALS */
 static bool is_running = false;
 
 static vec3_t camera_pos = {0, 0, 0};
 static triangle_t *triangles_to_render = NULL;
 static int previous_frame_time = 0;
+static mat4_t proj_matrix;
 
 /* FUNCTIONS */
 
@@ -33,6 +33,11 @@ void setup(void)
 	    renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING,
 	    window_width, window_height);
 
+	float fov = 60 * (M_PI / 180);
+	float aspect = (float)window_height / (float)window_width;
+	float znear = 0.1;
+	float zfar = 100.0;
+	proj_matrix = mat4_make_perspective(fov, aspect, znear, zfar);
 	load_cube_mesh_data();
 	// load_obj_file_data("./assets/f22.obj");
 }
@@ -83,11 +88,6 @@ void update(void)
 
 	previous_frame_time = SDL_GetTicks();
 	mesh.rotation.x += 0.005;
-	mesh.rotation.y += 0.005;
-	mesh.rotation.z += 0.005;
-	// mesh.scale.x += 0.002;
-	// mesh.scale.y += 0.001;
-	mesh.translation.x += 0.01;
 	mesh.translation.z = 5;
 
 	mat4_t scale_matrix =
@@ -155,14 +155,18 @@ void update(void)
 			}
 		}
 
-		vec2_t projected_points[3];
+		vec4_t projected_points[3];
 		for (int j = 0; j < 3; j++) {
-			projected_points[j] =
-			    project(FOV_FACTOR,
-				    vec3_from_vec4(&transformed_vertices[j]));
+			projected_points[j] = mat4_mul_vec4_project(
+			    &proj_matrix, &transformed_vertices[j]);
 
-			projected_points[j].x += (window_width / 2);
-			projected_points[j].y += (window_height / 2);
+			// scale into the view
+			projected_points[j].x *= (window_width / 2.0);
+			projected_points[j].y *= (window_height / 2.0);
+
+			// translating points to the middle of the screen
+			projected_points[j].x += (window_width / 2.0);
+			projected_points[j].y += (window_height / 2.0);
 		}
 
 		float avg_depth =
