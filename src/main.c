@@ -192,7 +192,6 @@ void update(void)
 void render(void)
 {
 	SDL_RenderClear(renderer);
-	// draw_grid();
 	int tri_count = array_length(triangles_to_render);
 	for (int i = 0; i < tri_count; i++) {
 		triangle_t triangle = triangles_to_render[i];
