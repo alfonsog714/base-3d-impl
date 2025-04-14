@@ -10,7 +10,8 @@ src/vector.c \
 src/mesh.c \
 src/triangle.c \
 src/array.c \
-src/matrix.c
+src/matrix.c \
+src/light.c
 
 TARGET := renderer
 

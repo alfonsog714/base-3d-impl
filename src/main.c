@@ -5,6 +5,7 @@
 
 #include "array.h"
 #include "display.h"
+#include "light.h"
 #include "matrix.h"
 #include "mesh.h"
 #include "triangle.h"
