@@ -88,7 +88,7 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	mesh.rotation.x += 0.005;
+	mesh.rotation.x += 0.002;
 	mesh.translation.z = 5;
 
 	mat4_t scale_matrix =
@@ -134,23 +134,22 @@ void update(void)
 		}
 
 		// Culling algorithm
+		vec3_t vec_a = vec3_from_vec4(&transformed_vertices[0]);
+		vec3_t vec_b = vec3_from_vec4(&transformed_vertices[1]);
+		vec3_t vec_c = vec3_from_vec4(&transformed_vertices[2]);
+
+		vec3_t a = vec3_sub(&vec_b, &vec_a);
+		vec3_normalize(&a);
+		vec3_t b = vec3_sub(&vec_c, &vec_a);
+		vec3_normalize(&b);
+
+		vec3_t normal_vector = vec3_cross_product(&a, &b);
+		vec3_normalize(&normal_vector);
+
+		vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
+
+		float dot = vec3_dot_product(&normal_vector, &camera_ray);
 		if (cull_method == CULL_BACKFACE) {
-			vec3_t vec_a = vec3_from_vec4(&transformed_vertices[0]);
-			vec3_t vec_b = vec3_from_vec4(&transformed_vertices[1]);
-			vec3_t vec_c = vec3_from_vec4(&transformed_vertices[2]);
-
-			vec3_t a = vec3_sub(&vec_b, &vec_a);
-			vec3_normalize(&a);
-			vec3_t b = vec3_sub(&vec_c, &vec_a);
-			vec3_normalize(&b);
-
-			vec3_t normal_vector = vec3_cross_product(&a, &b);
-			vec3_normalize(&normal_vector);
-
-			vec3_t camera_ray = vec3_sub(&camera_pos, &vec_a);
-
-			float dot =
-			    vec3_dot_product(&normal_vector, &camera_ray);
 			if (dot < 0) {
 				continue;
 			}
@@ -175,6 +174,14 @@ void update(void)
 		     transformed_vertices[2].z) /
 		    3.f;
 
+		// calculate color based on light angle
+		uint32_t triangle_color = mesh_face.color;
+
+		float light_intensity_factor =
+		    -vec3_dot_product(&light.direction, &normal_vector);
+		triangle_color = light_apply_intensity(triangle_color,
+						       light_intensity_factor);
+
 		triangle_t projected_triangle = {
 		    .points =
 			{
@@ -182,7 +189,7 @@ void update(void)
 			    {projected_points[1].x, projected_points[1].y},
 			    {projected_points[2].x, projected_points[2].y},
 			},
-		    .color = mesh_face.color,
+		    .color = triangle_color,
 		    .depth = avg_depth};
 		array_push(triangles_to_render, projected_triangle);
 	}
