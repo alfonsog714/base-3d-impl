@@ -39,8 +39,8 @@ void setup(void)
 	float znear = 0.1;
 	float zfar = 100.0;
 	proj_matrix = mat4_make_perspective(fov, aspect, znear, zfar);
-	load_cube_mesh_data();
-	// load_obj_file_data("./assets/f22.obj");
+	// load_cube_mesh_data();
+	load_obj_file_data("./assets/f22.obj");
 }
 
 void process_input(void)
@@ -88,7 +88,7 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	mesh.rotation.x += 0.002;
+	// mesh.rotation.x += 0.002;
 	mesh.translation.z = 5;
 
 	mat4_t scale_matrix =
@@ -163,6 +163,9 @@ void update(void)
 			// scale into the view
 			projected_points[j].x *= (window_width / 2.0);
 			projected_points[j].y *= (window_height / 2.0);
+
+			// invert the y
+			projected_points[j].y *= -1;
 
 			// translating points to the middle of the screen
 			projected_points[j].x += (window_width / 2.0);
