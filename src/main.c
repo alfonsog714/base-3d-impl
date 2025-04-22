@@ -95,7 +95,7 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	// mesh.rotation.x += 0.002;
+	mesh.rotation.x += 0.002;
 	mesh.translation.z = 5;
 
 	mat4_t scale_matrix =
