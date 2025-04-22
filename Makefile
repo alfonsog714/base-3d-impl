@@ -11,7 +11,8 @@ src/mesh.c \
 src/triangle.c \
 src/array.c \
 src/matrix.c \
-src/light.c
+src/light.c \
+src/triangle.c
 
 TARGET := renderer
 
