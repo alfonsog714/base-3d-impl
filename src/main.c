@@ -53,7 +53,8 @@ void process_input(void)
 		is_running = false;
 		break;
 	case SDL_KEYDOWN:
-		// this if chain is ugly as fuck. find a better way.
+		// TODO(fonzi): this if chain is ugly as fuck. find a better
+		// way.
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
 			is_running = false;
 		}
@@ -68,6 +69,12 @@ void process_input(void)
 		}
 		if (event.key.keysym.sym == SDLK_4) {
 			render_method = RENDER_FILL_TRIANGLE_WIRE;
+		}
+		if (event.key.keysym.sym == SDLK_5) {
+			render_method = RENDER_TEXTURED;
+		}
+		if (event.key.keysym.sym == SDLK_6) {
+			render_method = RENDER_TEXTURED_WIRE;
 		}
 		if (event.key.keysym.sym == SDLK_c) {
 			cull_method = CULL_BACKFACE;
@@ -215,9 +222,14 @@ void render(void)
 			    triangle.color);
 		}
 
+		if (render_method == RENDER_TEXTURED ||
+		    render_method == RENDER_TEXTURED_WIRE) {
+		}
+
 		if (render_method == RENDER_FILL_TRIANGLE_WIRE ||
 		    render_method == RENDER_WIRE ||
-		    render_method == RENDER_WIRE_VERTEX) {
+		    render_method == RENDER_WIRE_VERTEX ||
+		    render_method == RENDER_TEXTURED_WIRE) {
 			draw_triangle(&triangle, 0xFFFFFFFF);
 		}
 
