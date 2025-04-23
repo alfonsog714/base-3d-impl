@@ -12,7 +12,8 @@ src/triangle.c \
 src/array.c \
 src/matrix.c \
 src/light.c \
-src/texture.c
+src/texture.c \
+src/swap.c
 
 TARGET := renderer
 

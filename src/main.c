@@ -8,6 +8,7 @@
 #include "light.h"
 #include "matrix.h"
 #include "mesh.h"
+#include "texture.h"
 #include "triangle.h"
 #include "vector.h"
 
@@ -39,6 +40,11 @@ void setup(void)
 	float znear = 0.1;
 	float zfar = 100.0;
 	proj_matrix = mat4_make_perspective(fov, aspect, znear, zfar);
+
+	mesh_texture = (uint32_t *)REDBRICK_TEXTURE;
+	texture_width = 64;
+	texture_height = 64;
+
 	load_cube_mesh_data();
 	// load_obj_file_data("./assets/f22.obj");
 }
@@ -199,6 +205,9 @@ void update(void)
 			    {projected_points[1].x, projected_points[1].y},
 			    {projected_points[2].x, projected_points[2].y},
 			},
+		    .tex_coords = {{mesh_face.a_uv.u, mesh_face.a_uv.v},
+				   {mesh_face.b_uv.u, mesh_face.b_uv.v},
+				   {mesh_face.c_uv.u, mesh_face.c_uv.v}},
 		    .color = triangle_color,
 		    .depth = avg_depth};
 		array_push(triangles_to_render, projected_triangle);
@@ -224,6 +233,17 @@ void render(void)
 
 		if (render_method == RENDER_TEXTURED ||
 		    render_method == RENDER_TEXTURED_WIRE) {
+			draw_textured_triangle(
+			    triangle.points[0].x, triangle.points[0].y,
+			    triangle.tex_coords[0].u,
+			    triangle.tex_coords[0].v, // vertex a
+			    triangle.points[1].x, triangle.points[1].y,
+			    triangle.tex_coords[1].u,
+			    triangle.tex_coords[1].v, // vertex b
+			    triangle.points[2].x, triangle.points[2].y,
+			    triangle.tex_coords[2].u,
+			    triangle.tex_coords[2].v, // vertex c
+			    triangle.color);
 		}
 
 		if (render_method == RENDER_FILL_TRIANGLE_WIRE ||
