@@ -101,7 +101,7 @@ void update(void)
 	}
 
 	previous_frame_time = SDL_GetTicks();
-	mesh.rotation.x += 0.002;
+	mesh.rotation.x += 0.010;
 	mesh.translation.z = 5;
 
 	mat4_t scale_matrix =
@@ -243,7 +243,7 @@ void render(void)
 			    triangle.points[2].x, triangle.points[2].y,
 			    triangle.tex_coords[2].u,
 			    triangle.tex_coords[2].v, // vertex c
-			    triangle.color);
+			    mesh_texture);
 		}
 
 		if (render_method == RENDER_FILL_TRIANGLE_WIRE ||

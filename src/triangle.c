@@ -90,7 +90,7 @@ void draw_filled_triangle(int x0, int y0, int x1, int y1, int x2, int y2,
 
 void draw_textured_triangle(int x0, int y0, float u0, float v0, int x1, int y1,
 			    float u1, float v1, int x2, int y2, float u2,
-			    float v2, uint32_t color, uint32_t *texture)
+			    float v2, uint32_t *texture)
 {
 	// sort vertices by their y-coord
 	if (y0 > y1) {
@@ -110,5 +110,35 @@ void draw_textured_triangle(int x0, int y0, float u0, float v0, int x1, int y1,
 	if (y0 > y1) {
 		int_swap(&y0, &y1);
 		int_swap(&x0, &x1);
+		float_swap(&u0, &u1);
+		float_swap(&v0, &v1);
+	}
+
+	float inv_slope_1 = 0;
+	float inv_slope_2 = 0;
+
+	if (y1 - y0 != 0) {
+		inv_slope_1 = (float)(x1 - x0) / abs(y1 - y0);
+	}
+
+	if (y2 - y0 != 0) {
+		inv_slope_2 = (float)(x2 - x0) / abs(y2 - y0);
+	}
+
+	if (y1 - y0 == 0) {
+		return;
+	}
+
+	for (int y = y0; y <= y1; y++) {
+		int x_start = x1 + (y - y1) * inv_slope_1;
+		int x_end = x0 + (y - y0) * inv_slope_2;
+
+		if (x_start > x_end) {
+			int_swap(&x_start, &x_end);
+		}
+
+		for (int x = x_start; x < x_end; x++) {
+			draw_pixel(x, y, 0xFFFF00FF);
+		}
 	}
 }
