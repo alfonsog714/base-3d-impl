@@ -59,8 +59,6 @@ void process_input(void)
 		is_running = false;
 		break;
 	case SDL_KEYDOWN:
-		// TODO(fonzi): this if chain is ugly as fuck. find a better
-		// way.
 		if (event.key.keysym.sym == SDLK_ESCAPE) {
 			is_running = false;
 		}
