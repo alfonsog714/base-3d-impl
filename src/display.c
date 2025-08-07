@@ -1,4 +1,6 @@
 #include "display.h"
+#include "texture.h"
+#include "vector.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -50,6 +52,25 @@ void draw_pixel(int pos_x, int pos_y, uint32_t color)
 	    pos_y < window_height) {
 		color_buffer[(window_width * pos_y) + pos_x] = color;
 	}
+}
+
+void draw_texel(int x, int y, uint32_t *texture, vec2_t point_a, vec2_t point_b,
+		vec2_t point_c, float u0, float v0, float u1, float v1,
+		float u2, float v2)
+{
+	vec2_t xy = {x, y};
+	vec3_t weights = barycentric_weights(point_a, point_b, point_c, xy);
+	float alpha = weights.x;
+	float beta = weights.y;
+	float gamma = weights.z;
+
+	float interpolated_u = (u0 * alpha) + (u1 * beta) + (u2 * gamma);
+	float interpolated_v = (v0 * alpha) + (v1 * beta) + (v2 * gamma);
+
+	int tex_x = abs((int)(interpolated_u * texture_width));
+	int tex_y = abs((int)(interpolated_v * texture_height));
+
+	draw_pixel(x, y, texture[(tex_y * texture_width) + tex_x]);
 }
 
 void draw_line(int x0, int y0, int x1, int y1, uint32_t color)

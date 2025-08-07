@@ -114,6 +114,10 @@ void draw_textured_triangle(int x0, int y0, float u0, float v0, int x1, int y1,
 		float_swap(&v0, &v1);
 	}
 
+	vec2_t point_a = {x0, y0};
+	vec2_t point_b = {x1, y1};
+	vec2_t point_c = {x2, y2};
+
 	float inv_slope_1 = 0;
 	float inv_slope_2 = 0;
 
@@ -135,10 +139,8 @@ void draw_textured_triangle(int x0, int y0, float u0, float v0, int x1, int y1,
 			}
 
 			for (int x = x_start; x < x_end; x++) {
-				draw_pixel(x, y,
-					   (x % 2 == 0 && y % 2 == 0)
-					       ? 0xFFFF00FF
-					       : 0xFF000000);
+				draw_texel(x, y, texture, point_a, point_b,
+					   point_c, u0, v0, u1, v1, u2, v2);
 			}
 		}
 	}
@@ -164,10 +166,8 @@ void draw_textured_triangle(int x0, int y0, float u0, float v0, int x1, int y1,
 			}
 
 			for (int x = x_start; x < x_end; x++) {
-				draw_pixel(x, y,
-					   (x % 2 == 0 && y % 2 == 0)
-					       ? 0xFFFF00FF
-					       : 0xFF000000);
+				draw_texel(x, y, texture, point_a, point_b,
+					   point_c, u0, v0, u1, v1, u2, v2);
 			}
 		}
 	}

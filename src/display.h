@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include "vector.h"
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -63,6 +64,9 @@ extern cull_method_t cull_method;
 bool init_window(void);
 void clear_color_buffer(uint32_t color);
 void draw_pixel(int pos_x, int pos_y, uint32_t color);
+void draw_texel(int x, int y, uint32_t *texture, vec2_t point_a, vec2_t point_b,
+		vec2_t point_c, float u0, float v0, float u1, float v1,
+		float u2, float v2);
 void draw_line(int x0, int y0, int x1, int y1, uint32_t color);
 void draw_grid(void);
 void draw_rect(int pos_x, int pos_y, int w, int h, uint32_t color);
